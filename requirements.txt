@@ -1,0 +1,14 @@
+transformers
+evaluate
+pandas
+pymongo
+datasets
+streamlit
+selenium
+beautifulsoup4
+python-dotenv
+webdriver_manager
+lxml
+
+torch
+accelerate==0.20.3

@@ -1,0 +1,6 @@
+.env
+__pycache__
+results/*
+.venv
+.DS_Store
+Trained_Model/pytorch_model.bin
