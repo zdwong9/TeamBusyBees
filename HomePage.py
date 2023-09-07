@@ -10,9 +10,8 @@ from pymongo.server_api import ServerApi
 from datetime import datetime,timedelta
 from model.SummarisationModel import SummarisationModel
 
-# from crawl.crawler import run_crawler
+from crawl.crawler import run_crawler
 
-# Setting page title and header
 st.set_page_config(page_title="BusyBees", page_icon=":bee:")
 
 # Set API key
@@ -40,13 +39,13 @@ if "db_client" not in st.session_state:
     mycol = mydb["reuters"]
     st.session_state['db_client']=mycol
 
-# if 'started_thread' not in st.session_state:
-#     st.session_state['started_thread'] = True
-#     def start_thread():
-#         while True:
-#             run_crawler()
-#             sleep(5)
-#     Thread(target=start_thread).start()
+if 'started_thread' not in st.session_state:
+    st.session_state['started_thread'] = True
+    def start_thread():
+        while True:
+            run_crawler()
+            sleep(5)
+    Thread(target=start_thread).start()
 
 # generate a response
 def generate_response(prompt):
@@ -69,24 +68,52 @@ def retrieve_docs():
     docs=st.session_state["db_client"].find({'datetime': { "$gte": current_time_str}})
     return list(docs)
 
-# @st.cache_data(persist=True)
+@st.cache_data(persist=True)
 def retrieve_summary(_docs):
     summary=""
     for doc in _docs:
         summary+= " "+ doc["summary"]
-    # return SummarisationModel(summary).get_summary()
-    return "Sweden hopes Turkey will ratify the membership when the Turkish parliament reconvenes in October. Initial claims for state unemployment benefits fell 13,000 to 216,000 last week. Deputy leader of Sudan's paramilitary Rapid Support Forces (RSF) says U.S. sanctions are unfair. Proposed changes to a Chinese public security law could criminalise comments, clothing or symbols."
+    return SummarisationModel(summary).get_summary()
 
 def get_labels(docs):
-    return
-
+    pos,neu,neg=0,0,0
+    
+    for doc in docs:
+        if doc["label"]==1:
+            pos+=1
+        elif doc["label"]==0:
+            neu+=1
+        else:
+            neg+=1
+    return str(pos),str(neu),str(neg)
+def get_articles(docs):
+    return docs[0]["title"],docs[1]["title"],docs[2]["title"]
 def main():
 
     docs=retrieve_docs()
     summary=retrieve_summary(docs)
-    st.write(summary)
 
+    c= st.container()
+    today=datetime.today().strftime("%Y %b %d %I:%M %p")
+    c.header(f"Your markets brief as of {today}")
+    c.write(summary)
+    c.title("")
+    c1,c2,c3 = c.columns(3)
+    pos,neu,neg=get_labels(docs)
+    c1.subheader(":green[Positive Sentiments]")
+    c1.write(pos)
+    c2.subheader(":grey[Neutral Sentiments]")
+    c2.write(neu)
+    c3.subheader(":red[Negative Sentiments]")
+    c3.write(neg)
+
+    c.divider()
     
+    c4,c5,c6= c.columns(3)
+    a1,a2,a3=get_articles(docs)
+    c4.write(a1)
+    c5.write(a2)
+    c6.write(a3)
 
     with st.sidebar:
         st.image(image="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Citi.svg/2560px-Citi.svg.png", width=70)
@@ -111,13 +138,11 @@ def main():
 
     #show conversation
     if st.session_state['generated']:
-        message(st.session_state["generated"][0], key=str(0), logo=f'https://cdn-icons-png.flaticon.com/512/4712/4712009.png')
-        for i in range(len(st.session_state['past'])):
-            message(st.session_state["past"][i], is_user=True, key=str(i) + '_user', logo=f'https://cdn-icons-png.flaticon.com/512/2922/2922719.png')
-            message(st.session_state["generated"][i+1], key=str(i+1), logo=f'https://cdn-icons-png.flaticon.com/512/4712/4712009.png')
-
-
-
+        with response_container: 
+            message(st.session_state["generated"][0], key=str(0), logo=f'https://cdn-icons-png.flaticon.com/512/4712/4712009.png')
+            for i in range(len(st.session_state['past'])):
+                message(st.session_state["past"][i], is_user=True, key=str(i) + '_user', logo=f'https://cdn-icons-png.flaticon.com/512/2922/2922719.png')
+                message(st.session_state["generated"][i+1], key=str(i+1), logo=f'https://cdn-icons-png.flaticon.com/512/4712/4712009.png')
 
 if __name__=="__main__":
     main()
