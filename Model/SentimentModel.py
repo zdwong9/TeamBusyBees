@@ -9,11 +9,12 @@ class SentimentModel():
         tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
 
         classifier = pipeline("text-classification",model=model,tokenizer=tokenizer)
-        label=classifier(text,truncation=True)[0]["label"]
+        self.label=classifier(text,truncation=True)[0]["label"]
+    def get_label(self):
 
-        if label=="positive":
+        if self.label=="positive":
             encoding=1
-        elif label=="neutral":
+        elif self.label=="neutral":
             encoding=0
         else:
             encoding=2

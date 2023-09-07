@@ -9,6 +9,13 @@ from pymongo.server_api import ServerApi
 from datetime import datetime
 from dotenv import load_dotenv
 import os
+
+import sys
+ 
+# adding Folder_2 to the system path
+sys.path.append('../')
+
+from Model.SummarisationModel import SummarisationModel
 from Model.SentimentModel import SentimentModel
 
 load_dotenv()
@@ -83,7 +90,8 @@ def main(start,end):
         curr["title"]=title
         curr["body"]=body
         curr["datetime"]=dt
-        curr["label"]=SentimentModel(body)
+        curr["label"]=SentimentModel(body).get_label()
+        curr["summary"]=SummarisationModel(body).get_summary()
         res.append(curr)
 
 
@@ -94,3 +102,6 @@ def run_crawler():
     end=50
 
     main(start,end)
+
+if __name__=="__main__":
+    main(2,3)
