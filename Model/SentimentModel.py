@@ -4,8 +4,8 @@ class SentimentModel():
 
     def __init__(self,text):
         
-        config = AutoConfig.from_pretrained('../Trained_Model/config.json')
-        model = AutoModelForSequenceClassification.from_pretrained("../Trained_Model/pytorch_model.bin",config=config) 
+        config = AutoConfig.from_pretrained('../trained_model/config.json')
+        model = AutoModelForSequenceClassification.from_pretrained("../trained_model/pytorch_model.bin",config=config) 
         tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
 
         classifier = pipeline("text-classification",model=model,tokenizer=tokenizer)

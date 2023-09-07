@@ -23,28 +23,14 @@ load_dotenv()
 uri=os.getenv("DB_STRING")
 
 
-options = Options()
-options.add_argument("--headless")
-options.add_argument('--no-sandbox')
-options.add_argument('--disable-dev-shm-usage')
 
-options.set_capability("pageLoadStrategy", "eager")
-options.add_argument("--test-type")
-options.add_argument('--ignore-certificate-errors')
-options.add_argument('--ignore-ssl-errors')
-agent="Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1866.237 Safari/537.36"
-options.add_argument(f'user-agent={agent}')
-
-service = Service(executable_path="./chromedriver")
-browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
-base="https://www.reuters.com/news/archive/finance"
 
 
 client = MongoClient(uri, server_api=ServerApi('1'))
 mydb = client["news"]
 mycol = mydb["reuters"]
 
-def main(start,end):
+def main(start,end,browser,base):
     href_ls=[]
 
     for i in range(start,end+1):
@@ -98,10 +84,25 @@ def main(start,end):
     mycol.insert_many(res)
 
 def run_crawler():
-    start=2
-    end=50
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
 
-    main(start,end)
+    options.set_capability("pageLoadStrategy", "eager")
+    options.add_argument("--test-type")
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--ignore-ssl-errors')
+    agent="Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1866.237 Safari/537.36"
+    options.add_argument(f'user-agent={agent}')
+    chromedriver=os.path.join(os.getcwd(),"chromedriver")
+    service = Service(executable_path=chromedriver)
+    browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
+    # browser = webdriver.Chrome(service=service,options=options)
+    base="https://www.reuters.com/news/archive/finance"
+    start=2
+    end=10
+    main(start,end,browser,base)
 
 if __name__=="__main__":
-    main(2,10)
+    run_crawler()

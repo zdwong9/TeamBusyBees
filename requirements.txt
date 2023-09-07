@@ -9,6 +9,8 @@ beautifulsoup4
 python-dotenv
 webdriver_manager
 lxml
+openai
+streamlit-chat
 
 torch
 accelerate==0.20.3
