@@ -116,9 +116,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 - Wong Zheng Da - [Linkedin](https://www.linkedin.com/in/zdwong/) - zdwong.2021@scis.smu.edu.sg
 - Franky Lim - [Linkedin]() - franky.2021@scis.smu.edu.sg
 - Lim Hong Yao - [Linkedin]() - hongyao.lim.2021@scis.smu.edu.sg
-- Eunice Chew - [Linkedin]() - zihuic02@gmail.com
-- Chang Zi Hui - [Linkedin]() - eunice.chew.2021@scis.smu.edu.sg
-
+- Eunice Chew - [Linkedin](https://www.linkedin.com/in/eunicechewhuining) - eunice.chew.2021@scis.smu.edu.sg
+- Chang Zi Hui - [Linkedin]() - zihuic02@gmail.com 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
