@@ -8,7 +8,7 @@ import evaluate
 import torch
 import numpy
 
-from Model.NewsDataset import NewsDataset
+from model.NewsDataset import NewsDataset
 from dotenv import load_dotenv
 import os
 load_dotenv()

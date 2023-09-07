@@ -15,8 +15,8 @@ import sys
 # adding Folder_2 to the system path
 sys.path.append('../')
 
-from Model.SummarisationModel import SummarisationModel
-from Model.SentimentModel import SentimentModel
+from model.SummarisationModel import SummarisationModel
+from model.SentimentModel import SentimentModel
 
 load_dotenv()
 
@@ -104,4 +104,4 @@ def run_crawler():
     main(start,end)
 
 if __name__=="__main__":
-    main(2,3)
+    main(2,10)
